@@ -6,7 +6,8 @@ samples a FRESH realization per training episode (domain randomization) and per 
 draw. Event semantics follow California (PG&E) practice:
 
   * DR     -> announced critical-peak PRICE event. Grid stays UP; the buy price is raised by an
-              adder over the 16:00-21:00 summer window (PG&E Peak Day Pricing). NOT an import block.
+              adder over the 16:00-21:00 summer window (PG&E SmartRate, Schedule E-RSMART). NOT an
+              import block.
   * outage -> ordinary fault: hard disconnect (no import/export), NO advance signal.
   * PSPS   -> long announced disconnect (24-48 h), with an advance-warning signal.
 
@@ -34,7 +35,9 @@ DR_HOUR_WINDOW = (16, 21)         # 4-9 pm
 DR_MONTHS = (6, 9)                # Jun-Sep inclusive
 SUMMER_DAYS = 122                 # Jun 1 - Sep 30
 
-# PG&E Peak Day Pricing: ~+0.60 $/kWh adder over the event window (≈2x the peak TOU rate).
+# PG&E SmartRate (Schedule E-RSMART): +0.60 $/kWh adder over the event window (event price ≈2x the
+# summer peak TOU rate). SmartRate gives day-ahead notice and runs the full 4-9 pm on 9-15 days/yr;
+# this model uses a 4 h notice, 4-5 h events ending by 9 pm, and 8-10 events per summer on average.
 DR_PRICE_ADDER_USD_PER_KWH = 0.60
 DR_NOTICE_H = 4.0                 # same-day DR notice
 PSPS_NOTICE_H = 24.0             # day-ahead PSPS warning

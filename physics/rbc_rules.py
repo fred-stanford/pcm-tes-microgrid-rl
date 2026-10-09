@@ -70,10 +70,10 @@ BAT_FULL_CHARGE = 2
 
 BATTERY_FULL_SOC_FRAC = 0.98
 
-# --- Battery policy tuning (price- & forecast-aware benchmark) --------------------
-# TOU tiers from the tariff in the data: summer evening peak ~0.527 $/kWh (h16-20),
-# off-peak ~0.28-0.32, winter nearly flat ~0.29-0.31. A competent rule-based EMS sees
-# these prices (and a day-ahead PV forecast), so the benchmark does too.
+# --- Battery policy tuning (price-aware, forecast-free benchmark) ------------------
+# TOU tiers from the tariff in the data (E-ELEC): summer peak 0.552 $/kWh (h16-20),
+# part-peak 0.390, off-peak 0.334; winter nearly flat, 0.285-0.321. The benchmark sees
+# only the current prices (no forecasts), the same information as the RL agent.
 RBC_PEAK_PRICE = 0.45          # $/kWh: at/above this = peak (never grid-charge here)
 RBC_OFFPEAK_PRICE = 0.34       # $/kWh: at/below this = cheap (ok to pre-charge from grid)
 RBC_RESERVE_FRAC = 0.30        # keep >= this usable-SOC fraction in normal ops (reserve)
@@ -452,7 +452,7 @@ def _grid_tied_battery_action(
           no current PV (night/early morning) and the battery is below target — so it tops up
           cheaply for the coming evening peak without competing with on-site solar.
     It never force-charges from the grid at peak/shoulder prices (the old SOC-target policy
-    did, importing at the $0.527 peak regardless of price).
+    did, importing at the summer peak price regardless of price).
     """
     # (0) Advance-notice pre-charge (M6/M12): a DR notice or PSPS warning is active -> top up the
     # battery now (grid still up) so the coming price spike / outage is ridden on stored energy.
@@ -493,7 +493,7 @@ def decide_battery_action(
     """
     Battery suggestion for gridtrading_events.
 
-    Grid-tied (import allowed): load-following natural dispatch with two price/forecast-aware
+    Grid-tied (import allowed): load-following natural dispatch with two price-aware
     overrides — off-peak pre-charge for the coming peak, and export arbitrage on high sell
     prices (see ``_grid_tied_battery_action``).
     Islanded (DR or outage): never grid-backed charge; discharge on deficit first;
@@ -570,7 +570,7 @@ def decide_actions(
 
     heating_call, cooling_call, thermal_source = thermal_demand_flags(past_states, ti)
     season = season_mode(ta, row)
-    is_peak_season = season == "cooling"  # summer (Jun-Sep) — where the 0.527 $/kWh peak occurs
+    is_peak_season = season == "cooling"  # summer (Jun-Sep) — where the 0.552 $/kWh peak occurs
     pcm_c_kwh, pcm_h_kwh = pcm_energies_kwh(
         fmu_states if system_type == SystemType.HP_TES else None
     )
