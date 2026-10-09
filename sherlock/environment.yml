@@ -1,0 +1,26 @@
+# Unified Linux (Sherlock) conda environment for the microgrid RL study.
+# Merges the RL deps + the data-generation deps into ONE env; conda-forge only.
+# Version ranges (not exact patch-pins) so the solver resolves cleanly on Linux/conda-forge,
+# with safety caps (numpy<2, gymnasium/pandas major) to protect the code that was written/tested
+# against numpy 1.26 + gymnasium 1.x + SB3 2.8.
+# Create with:  conda env create -f sherlock/environment.yml   (or run sherlock/setup.sh)
+name: microgrid
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - numpy>=1.26,<2        # code written for numpy 1.26; numpy 2.0 has breaking changes
+  - pandas>=2.1,<3
+  - openpyxl>=3.1         # pd.read_excel engine (Calibration_Model_Input.xlsx, TOU/EEC)
+  - gymnasium>=1.0,<2     # env uses the gymnasium 1.x API (unwrapped, 5-tuple step)
+  - matplotlib            # figures (optional plotting stage)
+  - scipy                 # pvlib dependency
+  - pvlib                 # PV capacity factor (data generation)
+  - pytz                  # timezone handling (data generation)
+  - requests              # module-level import in physics/Data_Conversion.py (imported pipeline-wide)
+  - h5py                  # legacy/optional; kept for compatibility
+  - pip:
+      - stable-baselines3>=2.8   # pulls a compatible gymnasium; DQN implementation
+      - torch>=2.0               # CPU build is fine — DQN here is a tiny MLP; no GPU needed
+      - pytest

@@ -1,0 +1,23 @@
+# Conda environment for the study (simulation, RL training, data generation, figures).
+# Create with:  conda env create -f environment.yml
+# Version caps protect code written and tested against numpy 1.26, gymnasium 1.x and SB3 2.8.
+name: microgrid
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - numpy>=1.26,<2
+  - pandas>=2.1,<3
+  - openpyxl>=3.1         # reads Calibration_Model_Input.xlsx and the TOU/EEC tariff tables
+  - gymnasium>=1.0,<2
+  - matplotlib
+  - scipy
+  - pvlib                 # PV capacity factor (data generation)
+  - pytz
+  - requests
+  - h5py
+  - pip:
+      - stable-baselines3>=2.8
+      - torch>=2.0          # CPU build is enough; the DQN is a small MLP
+      - pytest

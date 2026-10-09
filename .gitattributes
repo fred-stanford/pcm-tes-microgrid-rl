@@ -1,0 +1,6 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+# Cluster (Linux) scripts must stay LF even when checked out / edited on Windows,
+# otherwise bash on Sherlock fails with $'\r': command not found.
+*.sh    text eol=lf
+*.sbatch text eol=lf

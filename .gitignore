@@ -1,0 +1,67 @@
+# ---------------------------------------------------------------------------
+# Python / OS
+# ---------------------------------------------------------------------------
+__pycache__/
+*.pyc
+.DS_Store
+.ipynb_checkpoints/
+.thermal_need_cache/
+*.log
+
+# ---------------------------------------------------------------------------
+# Generated data and run outputs (large; regenerate or download -- see README)
+# ---------------------------------------------------------------------------
+*.csv
+*.xlsx
+*.h5
+*.pkl
+*.fmu
+*.mat
+*.png
+runs/
+data_generation_pipeline/NSRDB_data/
+
+# Small inputs the code needs, kept in the repo
+!data/Calibration_Model_Input.xlsx
+!data_generation_pipeline/Data/EEC.xlsx
+!data_generation_pipeline/Data/TOU.xlsx
+# Summary results behind the paper's tables and figures
+!results/**/*.csv
+
+# ---------------------------------------------------------------------------
+# Local only: manuscript drafts, internal notes, and superseded code
+# ---------------------------------------------------------------------------
+# (Leading "/" anchors a pattern to the repo root, so it cannot match e.g. physics/hp_tes/.)
+/new_manuscript/
+/docs/
+/Debug/
+/Fig/_archive_*/
+/Fig/CAPTIONS.md
+/Fig/TABLES.md
+/Fig/REFERENCES.md
+/Fig/references.bib
+
+/Archive/
+/Archived/
+/Actual_RBC/
+/Experiments/
+/data_generation/
+/hp_tes/
+/hp_tes_v2/
+/microgrid_framework/
+/framework/
+/test_RBC_results*/
+
+/physics/hp_tes_OLD_backup/
+/physics/event_regenerator.py
+/physics/hp_tes/_selftest.py
+/physics/hp_tes/README_FOR_FRED.md
+/microgrid/state.py
+/data_generation_pipeline/Data_Preprocess_open_meteo_prices.ipynb
+/data_generation_pipeline/Passive_Model.py
+# Third-party PG&E documents (the numeric tables EEC.xlsx / TOU.xlsx are kept; see the pipeline README)
+/data_generation_pipeline/Data/PGE-EEC-Price-Sheets/
+
+# Logs from cluster jobs (keep the folder)
+sherlock/logs/*
+!sherlock/logs/.gitkeep
